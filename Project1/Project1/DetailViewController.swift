@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Social
 
 class DetailViewController: UIViewController {
   @IBOutlet weak var detailImageView: UIImageView!
@@ -31,6 +32,7 @@ class DetailViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.configureView()
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "shareTapped")
   }
 
   override func didReceiveMemoryWarning() {
@@ -45,6 +47,14 @@ class DetailViewController: UIViewController {
   override func viewWillDisappear(animated: Bool) {
     super.viewDidDisappear(animated)
     navigationController?.hidesBarsOnTap = false
+  }
+
+  func shareTapped() {
+    let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+    vc.setInitialText("Yay!!")
+    vc.addImage(detailImageView.image!)
+    vc.addURL(NSURL(string: "http://www.photolib.noaa/gov/nssl"))
+    presentViewController(vc, animated: true, completion: nil)
   }
 }
 
