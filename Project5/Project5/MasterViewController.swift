@@ -46,35 +46,45 @@ class MasterViewController: UITableViewController {
     let errorTitle: String
     let errorMessage: String
 
-    if wordIsLongerThanThreeChars(lowerAnswer) {
-      if wordIsPossible(lowerAnswer) {
-        if wordIsOriginal(lowerAnswer) {
-          if wordIsReal(lowerAnswer) {
-            objects.insert(answer, atIndex: 0)
+    if wordIsNotTheStartingWord(lowerAnswer) {
+      if wordIsLongerThanThreeChars(lowerAnswer) {
+        if wordIsPossible(lowerAnswer) {
+          if wordIsOriginal(lowerAnswer) {
+            if wordIsReal(lowerAnswer) {
+              objects.insert(answer, atIndex: 0)
               let indexPath = NSIndexPath(forRow: 0, inSection: 0)
               tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
 
               return
+            } else {
+              errorTitle = "Word Not Recognized"
+              errorMessage = "You can't just make them up, you know!"
+              displayError(errorTitle, errorMessage: errorMessage)
+            }
           } else {
-            errorTitle = "Word Not Recognized"
-            errorMessage = "You can't just make them up, you know!"
+            errorTitle = "Duplicate"
+            errorMessage = "You already used that one!"
             displayError(errorTitle, errorMessage: errorMessage)
           }
         } else {
-          errorTitle = "Duplicate"
-          errorMessage = "You already used that one!"
+          errorTitle = "Word Not Possible"
+          errorMessage = "You can't spell that word from '\(title!.lowercaseString)'!"
           displayError(errorTitle, errorMessage: errorMessage)
         }
       } else {
-        errorTitle = "Word Not Possible"
-        errorMessage = "You can't spell that word from '\(title!.lowercaseString)'!"
+        errorTitle = "Word Too Short"
+        errorMessage = "Your word needs to be at least 3 characters!"
         displayError(errorTitle, errorMessage: errorMessage)
       }
     } else {
-      errorTitle = "Word Too Short"
-      errorMessage = "Your word needs to be at least 3 characters!"
+      errorTitle = "Word Is the Original"
+      errorMessage = "Your word needs to be something other than the original!"
       displayError(errorTitle, errorMessage: errorMessage)
     }
+  }
+
+  func wordIsNotTheStartingWord(answer: String) -> Bool {
+    return answer != title!.lowercaseString
   }
 
   func wordIsLongerThanThreeChars(answer: String) -> Bool {
@@ -115,10 +125,7 @@ class MasterViewController: UITableViewController {
 
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
   }
-
-  // MARK: - Table View
 
   override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
     return 1
@@ -141,8 +148,6 @@ class MasterViewController: UITableViewController {
     title = allWords[0]
     objects.removeAll(keepCapacity: true)
     tableView.reloadData()
-
   }
-
 }
 
