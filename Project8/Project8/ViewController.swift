@@ -45,6 +45,16 @@ class ViewController: UIViewController {
         presentViewController(ac, animated: true, completion: nil)
 
       }
+    } else {
+      currentAnswer.text = ""
+      for btn in activatedButtons {
+        btn.hidden = false
+      }
+
+      activatedButtons.removeAll()
+      if score > 0 {
+        score -= 1
+      }
     }
   }
 
